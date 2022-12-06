@@ -1,6 +1,7 @@
 package com.api.nataly.poc1api.model.entities;
 
 import com.api.nataly.poc1api.model.enums.PersonType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,8 +10,8 @@ import lombok.NoArgsConstructor;
 import java.io.Serializable;
 import java.util.Set;
 
-@Data
 @Entity
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "TB_CUSTOMER")
@@ -30,13 +31,17 @@ public class Customer implements Serializable {
     private String email;
 
     @Column(name = "CUSTOMER_DOCUMENT_NUMBER", nullable = false, unique = true)
-    private String documentNumber;
+    private String documentNumber; //ver anotação para validacao de CPF e de CNPJ
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "CUSTOMER_PERSON_TYPE", nullable = false)
     private PersonType personType;
 
     @Column(name = "CUSTOMER_PHONE_NUMBER", nullable = false, unique = true)
     private String phoneNumber;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY, cascade = CascadeType.ALL) //um Cliente pode ter varios Enderecos
     private Set<Address> adresses; //ver vantagem de usar o Set ao invés do List. Ver se é melhor usar o Set mesmo
+    //Lazy: carregado do banco apenas quando de fato necessário
 }

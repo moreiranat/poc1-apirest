@@ -2,6 +2,6 @@ package com.api.nataly.poc1api.model.enums;
 
 public enum PersonType {
 
-    PF,
-    PJ
+    PESSOA_FISICA,
+    PESSOA_JURIDICA
 }

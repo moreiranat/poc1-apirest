@@ -7,8 +7,8 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
-@Data
 @Entity
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "TB_ADDRESS")
@@ -39,5 +39,9 @@ public class Address implements Serializable {
     @Column(name = "ADDRESS_STATE", nullable = false)
     private String state;
 
+    //Muitos Endereços podem esta associados a 1 Cliente
+    @ManyToOne(fetch = FetchType.LAZY) //Lazy: carregado do banco apenas quando de fato necessário
+    @JoinColumn(name = "CUSTOMER_ID")
     private Customer customer;
+
 }
