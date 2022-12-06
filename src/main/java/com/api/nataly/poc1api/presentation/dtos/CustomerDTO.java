@@ -1,7 +1,13 @@
 package com.api.nataly.poc1api.presentation.dtos;
 
 import com.api.nataly.poc1api.model.enums.PersonType;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class CustomerDTO {
 
     private Long id;
