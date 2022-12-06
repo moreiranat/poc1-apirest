@@ -29,13 +29,13 @@ public class Customer implements Serializable {
     @Column(name = "CUSTOMER_EMAIL", nullable = false)
     private String email;
 
-    @Column(name = "CUSTOMER_DOCUMENT_NUMBER", nullable = false)
+    @Column(name = "CUSTOMER_DOCUMENT_NUMBER", nullable = false, unique = true)
     private String documentNumber;
 
     @Column(name = "CUSTOMER_PERSON_TYPE", nullable = false)
     private PersonType personType;
 
-    @Column(name = "CUSTOMER_PHONE_NUMBER", nullable = false)
+    @Column(name = "CUSTOMER_PHONE_NUMBER", nullable = false, unique = true)
     private String phoneNumber;
 
     private Set<Address> adresses; //ver vantagem de usar o Set ao invés do List. Ver se é melhor usar o Set mesmo
