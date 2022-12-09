@@ -38,9 +38,7 @@ public class CustomerConverterServiceImpl implements CustomerConverterService {
             dto.setId(entity.getId());
             dto.setName(entity.getName());
             dto.setEmail(entity.getEmail());
-            dto.setDocumentNumber(entity.getDocumentNumber());
             dto.setPersonType(entity.getPersonType());
-            dto.setPhoneNumber(entity.getPhoneNumber());
 
             return dto;
         }

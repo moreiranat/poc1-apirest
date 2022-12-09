@@ -1,6 +1,5 @@
 package com.api.nataly.poc1api.business.services;
 
-import com.api.nataly.poc1api.model.entities.Address;
 import com.api.nataly.poc1api.model.entities.Customer;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -8,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @Service
 public interface CustomerService {
@@ -18,7 +16,7 @@ public interface CustomerService {
     public void delete(Customer customer);
     public void deleteById(Long id); //deleta o Customer passando o id dele
     public Page<Customer> findAllCustomers(Pageable pageable);
-    public List<Customer> findCustomerByFilter(Customer filter);
+    public List<Customer> findCustomersByFilter(Customer filter);
     public Optional<Customer> findById(long id);
     public boolean existsByDocumentNumber(String documentNumber);
     public boolean existsById(Long id);

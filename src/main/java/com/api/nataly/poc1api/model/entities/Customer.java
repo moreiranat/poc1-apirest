@@ -2,10 +2,9 @@ package com.api.nataly.poc1api.model.entities;
 
 import com.api.nataly.poc1api.model.enums.PersonType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.io.Serializable;
 import java.util.Set;
@@ -30,6 +29,8 @@ public class Customer implements Serializable {
     @Column(name = "CUSTOMER_EMAIL", nullable = false)
     private String email;
 
+    @Getter(onMethod = @__({@JsonIgnore}))
+    @Setter(onMethod = @__({@JsonProperty}))
     @Column(name = "CUSTOMER_DOCUMENT_NUMBER", nullable = false, unique = true)
     private String documentNumber; //ver anotação para validacao de CPF e de CNPJ
 
@@ -37,6 +38,8 @@ public class Customer implements Serializable {
     @Column(name = "CUSTOMER_PERSON_TYPE", nullable = false)
     private PersonType personType;
 
+    @Getter(onMethod = @__({@JsonIgnore}))
+    @Setter(onMethod = @__({@JsonProperty}))
     @Column(name = "CUSTOMER_PHONE_NUMBER", nullable = false, unique = true)
     private String phoneNumber;
 
