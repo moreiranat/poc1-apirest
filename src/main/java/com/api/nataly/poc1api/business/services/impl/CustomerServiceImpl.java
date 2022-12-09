@@ -1,7 +1,6 @@
 package com.api.nataly.poc1api.business.services.impl;
 
 import com.api.nataly.poc1api.business.services.CustomerService;
-import com.api.nataly.poc1api.model.entities.Address;
 import com.api.nataly.poc1api.model.entities.Customer;
 import com.api.nataly.poc1api.model.repositories.CustomerRepository;
 import jakarta.transaction.Transactional;
@@ -14,7 +13,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
 
 @Service
 public class CustomerServiceImpl implements CustomerService {
@@ -104,11 +102,6 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public Page<Customer> findAllCustomers(Pageable pageable) {
         return customerRepository.findAll(pageable);
-    }
-
-    @Override
-    public Set<Address> findAllAddresses(Long id) {
-        return null; //falta implementar
     }
 
     @Override

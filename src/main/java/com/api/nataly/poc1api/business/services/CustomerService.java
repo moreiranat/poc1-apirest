@@ -18,7 +18,6 @@ public interface CustomerService {
     public void delete(Customer customer);
     public void deleteById(Long id); //deleta o Customer passando o id dele
     public Page<Customer> findAllCustomers(Pageable pageable);
-    public Set<Address> findAllAddresses(Long id); //falta implementar esse metodo
     public List<Customer> findCustomerByFilter(Customer filter);
     public Optional<Customer> findById(long id);
     public boolean existsByDocumentNumber(String documentNumber);
