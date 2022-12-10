@@ -106,7 +106,6 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public List<Customer> findCustomersByFilter(Customer filter) {
-
         Example<Customer> example = Example.of(filter,
                 ExampleMatcher.matching()
                         .withIgnoreCase()
@@ -116,7 +115,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public Optional<Customer> findById(long id) {
+    public Optional<Customer> findById(Long id) {
         return customerRepository.findById(id);
     }
 

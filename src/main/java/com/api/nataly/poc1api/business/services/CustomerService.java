@@ -17,7 +17,7 @@ public interface CustomerService {
     public void deleteById(Long id); //deleta o Customer passando o id dele
     public Page<Customer> findAllCustomers(Pageable pageable);
     public List<Customer> findCustomersByFilter(Customer filter);
-    public Optional<Customer> findById(long id);
+    public Optional<Customer> findById(Long id);
     public boolean existsByDocumentNumber(String documentNumber);
     public boolean existsById(Long id);
     public boolean existsByPhoneNumber(String phoneNumber);

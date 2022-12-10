@@ -7,10 +7,12 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
-@Entity
 @Data
+@Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "TB_CUSTOMER")
@@ -43,8 +45,18 @@ public class Customer implements Serializable {
     @Column(name = "CUSTOMER_PHONE_NUMBER", nullable = false, unique = true)
     private String phoneNumber;
 
+    //Lazy: na hora que vai carregar um Customer no banco de dados, ele vai carregar só depois um endereço principal, para nao sobrecarregar o banco de dados
+    //Lazy: busca lenta, permite que a busca de um relacionamento seja adiada ate que seja acessada
+    //Por padrao, o OneToOne e ManyToMany são EAGER
+    @OneToOne(fetch = FetchType.LAZY) //relacionamento unidirecional
+    //@Embedded
+    @Getter(onMethod = @__({@JsonIgnore}))
+    @Setter(onMethod = @__({@JsonProperty}))
+    @JoinColumn(name = "MAIN_ADDRESS", nullable = false, unique = true) //@JoinColumn indica o nome da coluna referenciada na chave estrangeira
+    private Address mainAddress;
+
     @JsonIgnore
     @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY, cascade = CascadeType.ALL) //um Cliente pode ter varios Enderecos
-    private Set<Address> adresses; //ver vantagem de usar o Set ao invés do List. Ver se é melhor usar o Set mesmo
+    private List<Address> adresses = new ArrayList<>();
     //Lazy: carregado do banco apenas quando de fato necessário
 }

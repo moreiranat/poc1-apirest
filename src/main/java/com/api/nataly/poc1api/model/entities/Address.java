@@ -1,5 +1,6 @@
 package com.api.nataly.poc1api.model.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,8 +8,9 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
-@Entity
 @Data
+@Entity
+//@Embeddable
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "TB_ADDRESS")
@@ -39,9 +41,13 @@ public class Address implements Serializable {
     @Column(name = "ADDRESS_STATE", nullable = false)
     private String state;
 
-    //Muitos Endereços podem esta associados a 1 Cliente
-    @ManyToOne(fetch = FetchType.LAZY) //Lazy: carregado do banco apenas quando de fato necessário
+    @Column(name = "MAIN_ADDRESS")
+    @JsonIgnore
+    private Boolean mainAddress;
+
+    @ManyToOne(fetch = FetchType.LAZY) //Muitos Enderecos podem estar associados a 1 Cliente
     @JoinColumn(name = "CUSTOMER_ID")
     private Customer customer;
+    //Lazy: carregado do banco apenas quando de fato necessário
 
 }

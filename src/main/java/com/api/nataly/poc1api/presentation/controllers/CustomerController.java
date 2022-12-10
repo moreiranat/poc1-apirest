@@ -36,7 +36,7 @@ public class CustomerController {
             entity = customerService.save(entity);
             dto = customerConverterService.customerToDTO(entity);
 
-            return new ResponseEntity(dto, HttpStatus.CREATED);
+            return new ResponseEntity(dto, HttpStatus.CREATED); //status 201 Created
 
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -52,7 +52,7 @@ public class CustomerController {
             entity = customerService.update(entity);
             dto = customerConverterService.customerToDTO(entity);
 
-            return ResponseEntity.ok(dto);
+            return ResponseEntity.ok(dto); //status 200 Ok
 
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -108,7 +108,7 @@ public class CustomerController {
 
         Optional<Customer> customerOptional = customerService.findById(id);
 
-        if (!customerOptional.isPresent()) {
+        if(!customerOptional.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Customer not found.");
         }
         return ResponseEntity.status(HttpStatus.OK).body(customerOptional.get());
