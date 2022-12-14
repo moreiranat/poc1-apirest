@@ -19,7 +19,7 @@ public class AddressDTO {
 
     private String city;
 
-    private String cep;
+    private String zipCode;
 
     private String state;
 

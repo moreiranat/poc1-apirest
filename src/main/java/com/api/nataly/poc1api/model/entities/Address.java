@@ -36,14 +36,14 @@ public class Address implements Serializable {
     private String city;
 
     @Column(name = "ADDRESS_CEP", nullable = false)
-    private String cep;
+    private String zipCode;
 
     @Column(name = "ADDRESS_STATE", nullable = false)
     private String state;
 
     @Column(name = "MAIN_ADDRESS")
     @JsonIgnore
-    private Boolean mainAddress;
+    private Boolean mainAddress = false;
 
     @ManyToOne(fetch = FetchType.LAZY) //Muitos Enderecos podem estar associados a 1 Cliente
     @JoinColumn(name = "CUSTOMER_ID")
