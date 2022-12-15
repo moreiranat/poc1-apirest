@@ -33,26 +33,6 @@ public class CustomerServiceImpl implements CustomerService {
             throw new IllegalStateException("Customer is already in the database");
         }
 
-        if (customer.getName() == null || customer.getName().isBlank()) {
-            throw new MissingFieldException("name", "save");
-        }
-
-        if (customer.getEmail() == null || customer.getEmail().isBlank()) {
-            throw new MissingFieldException("e-mail", "save");
-        }
-
-        if (customer.getDocumentNumber() == null || customer.getDocumentNumber().isBlank()) {
-            throw new MissingFieldException("document number", "save");
-        }
-
-        if (customer.getPersonType() == null) {
-            throw new MissingFieldException("person type", "save");
-        }
-
-        if (customer.getPhoneNumber() == null || customer.getPhoneNumber().isBlank()) {
-            throw new MissingFieldException("phone number", "save");
-        }
-
         if(customerRepository.existsByEmail(customer.getEmail())) {
             throw new ObjectAlreadyExistsException("There is already a customer with e-mail " + customer.getEmail());
         }
@@ -77,22 +57,6 @@ public class CustomerServiceImpl implements CustomerService {
             throw new ObjectNotFoundException("customer", "id", customer.getId());
         }
 
-        if(customer.getName() == null || customer.getName().isBlank()) {
-            throw new MissingFieldException("name", "update");
-        }
-
-        if (customer.getEmail() == null || customer.getEmail().isBlank()) {
-            throw new MissingFieldException("e-mail", "update");
-        }
-
-        if (customer.getDocumentNumber() == null || customer.getDocumentNumber().isBlank()) {
-            throw new MissingFieldException("document number", "update");
-        }
-
-        if (customer.getPersonType() == null) {
-            throw new MissingFieldException("person type", "update");
-        }
-
         if(customerRepository.existsByEmail(customer.getEmail())) {
             Customer customerSaved = findByEmail(customer.getEmail()).get();
             if (!Objects.equals(customerSaved.getId(), customer.getId())) {
@@ -115,6 +79,52 @@ public class CustomerServiceImpl implements CustomerService {
         }
 
         return customerRepository.save(customer);
+    }
+
+    @Override
+    @Transactional
+    public void delete(Customer customer) {
+        if(customer.getId() == null) {
+            throw new MissingFieldException("id", "delete");
+        } else if (!customerRepository.existsById(customer.getId())) {
+            throw new ObjectNotFoundException("customer", "id", customer.getId());
+        }
+
+        customerRepository.delete(customer);
+    }
+
+    @Override
+    @Transactional
+    public void deleteById(Long id) {
+        if(id == null) {
+            throw new MissingFieldException("id", "delete");
+        } else if (!customerRepository.existsById(id)) {
+            throw new ObjectNotFoundException("customer", "id", id);
+        }
+
+        customerRepository.deleteById(id);
+    }
+
+    @Override
+    public Page<Customer> findAllCustomers(Pageable pageable) {
+
+        return customerRepository.findAll(pageable);
+    }
+
+    @Override
+    public List<Customer> findCustomersByFilter(Customer filter) {
+        Example<Customer> example = Example.of(filter,
+                ExampleMatcher.matching()
+                        .withIgnoreCase()
+                        .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING));
+
+        return customerRepository.findAll(example);
+    }
+
+    @Override
+    public Optional<Customer> findById(Long id) {
+
+        return customerRepository.findById(id);
     }
 
     private Optional<Customer> findByName(String name) {
@@ -163,51 +173,6 @@ public class CustomerServiceImpl implements CustomerService {
         }
 
         return customerRepository.findByPhoneNumber(phoneNumber);
-    }
-
-    @Override
-    @Transactional
-    public void delete(Customer customer) {
-        if(customer.getId() == null) {
-            throw new MissingFieldException("id", "delete");
-        } else if (!customerRepository.existsById(customer.getId())) {
-            throw new ObjectNotFoundException("customer", "id", customer.getId());
-        }
-
-        customerRepository.delete(customer);
-    }
-
-    @Override
-    @Transactional
-    public void deleteById(Long id) {
-        if(id == null) {
-            throw new MissingFieldException("id", "delete");
-        } else if (!customerRepository.existsById(id)) {
-            throw new ObjectNotFoundException("customer", "id", id);
-        }
-
-        customerRepository.deleteById(id);
-    }
-
-    @Override
-    public Page<Customer> findAllCustomers(Pageable pageable) {
-
-        return customerRepository.findAll(pageable);
-    }
-
-    @Override
-    public List<Customer> findCustomersByFilter(Customer filter) {
-        Example<Customer> example = Example.of(filter,
-                ExampleMatcher.matching()
-                        .withIgnoreCase()
-                        .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING));
-
-        return customerRepository.findAll(example);
-    }
-
-    @Override
-    public Optional<Customer> findById(Long id) {
-        return customerRepository.findById(id);
     }
 
 }
