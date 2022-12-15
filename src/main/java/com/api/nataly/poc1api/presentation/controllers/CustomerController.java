@@ -66,7 +66,7 @@ public class CustomerController {
 
             return new ResponseEntity(HttpStatus.NO_CONTENT);
 
-        }catch (Exception e) {
+        } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }

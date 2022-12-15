@@ -18,8 +18,5 @@ public interface CustomerService {
     public Page<Customer> findAllCustomers(Pageable pageable);
     public List<Customer> findCustomersByFilter(Customer filter);
     public Optional<Customer> findById(Long id);
-    public boolean existsByDocumentNumber(String documentNumber);
-    public boolean existsById(Long id);
-    public boolean existsByPhoneNumber(String phoneNumber);
 
 }

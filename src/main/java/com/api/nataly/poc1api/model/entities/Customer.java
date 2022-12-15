@@ -28,7 +28,7 @@ public class Customer implements Serializable {
     @Column(name = "CUSTOMER_NAME", nullable = false)
     private String name;
 
-    @Column(name = "CUSTOMER_EMAIL", nullable = false)
+    @Column(name = "CUSTOMER_EMAIL", nullable = false, unique = true)
     private String email;
 
     @Getter(onMethod = @__({@JsonIgnore}))
