@@ -7,4 +7,5 @@ public class ObjectNotFoundException extends RuntimeException {
     public ObjectNotFoundException(String object, String fieldName, Object field) {
         super("Could not find a " + object + " with " + fieldName + " " + field);
     }
+
 }

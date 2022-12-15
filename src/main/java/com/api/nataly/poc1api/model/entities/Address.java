@@ -41,9 +41,9 @@ public class Address implements Serializable {
     @Column(name = "ADDRESS_STATE", nullable = false)
     private String state;
 
-    @Column(name = "MAIN_ADDRESS")
+    @Column(name = "IS_MAIN_ADDRESS")
     @JsonIgnore
-    private Boolean mainAddress = false;
+    private Boolean isMainAddress = false;
 
     @ManyToOne(fetch = FetchType.LAZY) //Muitos Enderecos podem estar associados a 1 Cliente
     @JoinColumn(name = "CUSTOMER_ID")

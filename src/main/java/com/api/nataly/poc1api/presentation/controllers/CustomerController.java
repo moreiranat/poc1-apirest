@@ -4,6 +4,7 @@ import com.api.nataly.poc1api.business.services.CustomerConverterService;
 import com.api.nataly.poc1api.business.services.CustomerService;
 import com.api.nataly.poc1api.model.entities.Customer;
 import com.api.nataly.poc1api.presentation.dtos.CustomerDTO;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -29,7 +30,7 @@ public class CustomerController {
     }
 
     @PostMapping
-    public ResponseEntity save(@RequestBody CustomerDTO dto) { //colocar o @Valid antes do @RequestBody
+    public ResponseEntity save(@Valid @RequestBody CustomerDTO dto) {
 
         try {
             Customer entity = customerConverterService.dtoToCustomer(dto);
@@ -44,7 +45,7 @@ public class CustomerController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity update(@PathVariable("id") Long id, @RequestBody CustomerDTO dto) { //colocar o @Valid antes do @RequestBody
+    public ResponseEntity update(@PathVariable("id") Long id, @Valid @RequestBody CustomerDTO dto) {
 
         try {
             dto.setId(id);

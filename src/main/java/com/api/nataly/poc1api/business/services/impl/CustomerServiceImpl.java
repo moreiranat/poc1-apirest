@@ -118,48 +118,48 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     private Optional<Customer> findByName(String name) {
-        if(name == null) {
-            throw new IllegalStateException("E-mail cannot be null");
+        if(name == null || name.isBlank()) {
+            throw new MissingFieldException("name");
         }
 
         if (!customerRepository.existsByName(name)) {
-            throw new IllegalStateException("Customer with name " + name + " not found");
+            throw new ObjectNotFoundException("customer", "name", name);
         }
 
         return customerRepository.findByName(name);
     }
 
     private Optional<Customer> findByEmail(String email) {
-        if(email == null) {
-            throw new IllegalStateException("E-mail cannot be null");
+        if(email == null || email.isBlank()) {
+            throw new MissingFieldException("e-mail");
         }
 
         if (!customerRepository.existsByEmail(email)) {
-            throw new IllegalStateException("Customer with e-mail " + email + " not found");
+            throw new ObjectNotFoundException("customer", "e-mail", email);
         }
 
         return customerRepository.findByEmail(email);
     }
 
     private Optional<Customer> findByDocumentNumber(String documentNumber) {
-        if(documentNumber == null) {
-            throw new IllegalStateException("Document number cannot be null");
+        if(documentNumber == null || documentNumber.isBlank()) {
+            throw new MissingFieldException("document number");
         }
 
         if (!customerRepository.existsByDocumentNumber(documentNumber)) {
-            throw new IllegalStateException("Customer with document number " + documentNumber + " not found");
+            throw new ObjectNotFoundException("customer", "document number", documentNumber);
         }
 
         return customerRepository.findByDocumentNumber(documentNumber);
     }
 
     private Optional<Customer> findByPhoneNumber(String phoneNumber) {
-        if(phoneNumber == null) {
-            throw new IllegalStateException("Phone number cannot be null");
+        if(phoneNumber == null || phoneNumber.isBlank()) {
+            throw new MissingFieldException("phone number");
         }
 
         if (!customerRepository.existsByPhoneNumber(phoneNumber)) {
-            throw new IllegalStateException("Customer with phone number " + phoneNumber + " not found");
+            throw new ObjectNotFoundException("customer", "phone number", phoneNumber);
         }
 
         return customerRepository.findByPhoneNumber(phoneNumber);
