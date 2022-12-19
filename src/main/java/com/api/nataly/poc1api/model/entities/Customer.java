@@ -4,6 +4,7 @@ import com.api.nataly.poc1api.model.enums.PersonType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import lombok.*;
 
 import java.io.Serializable;
