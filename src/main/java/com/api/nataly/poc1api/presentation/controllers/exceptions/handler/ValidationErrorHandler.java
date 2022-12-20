@@ -1,6 +1,6 @@
-package com.api.nataly.poc1api.presentation.controllers;
+package com.api.nataly.poc1api.presentation.controllers.exceptions.handler;
 
-import com.api.nataly.poc1api.presentation.dtos.ErrorDTO;
+import com.api.nataly.poc1api.presentation.dtos.errorDTO.ErrorDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -37,4 +37,5 @@ public class ValidationErrorHandler {
 
         return ResponseEntity.status(exception.getStatusCode()).body(dtos);
     }
+
 }

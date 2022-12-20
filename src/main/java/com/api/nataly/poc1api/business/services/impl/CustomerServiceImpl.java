@@ -38,7 +38,7 @@ public class CustomerServiceImpl implements CustomerService {
         }
 
         if(customerRepository.existsByDocumentNumber(customer.getDocumentNumber())) {
-            throw new ObjectAlreadyExistsException("There is already a customer with document number " + customer.getDocumentNumber());
+            throw new ObjectAlreadyExistsException("There is already a customer with CPF/CNPJ " + customer.getDocumentNumber());
         }
 
         if(customerRepository.existsByPhoneNumber(customer.getPhoneNumber())) {
@@ -67,7 +67,7 @@ public class CustomerServiceImpl implements CustomerService {
         if(customerRepository.existsByDocumentNumber(customer.getDocumentNumber())) {
             Customer customerSaved = findByDocumentNumber(customer.getDocumentNumber()).get();
             if (!Objects.equals(customerSaved.getId(), customer.getId())) {
-                throw new ObjectAlreadyExistsException("There is already a Customer with document number " + customer.getDocumentNumber());
+                throw new ObjectAlreadyExistsException("There is already a Customer with CPF/CNPJ " + customer.getDocumentNumber());
             }
         }
 
@@ -153,11 +153,11 @@ public class CustomerServiceImpl implements CustomerService {
 
     private Optional<Customer> findByDocumentNumber(String documentNumber) {
         if(documentNumber == null || documentNumber.isBlank()) {
-            throw new MissingFieldException("document number");
+            throw new MissingFieldException("CPF/CNPJ");
         }
 
         if (!customerRepository.existsByDocumentNumber(documentNumber)) {
-            throw new ObjectNotFoundException("customer", "document number", documentNumber);
+            throw new ObjectNotFoundException("customer", "CPF/CNPJ", documentNumber);
         }
 
         return customerRepository.findByDocumentNumber(documentNumber);

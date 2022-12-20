@@ -1,17 +1,21 @@
 package com.api.nataly.poc1api.presentation.dtos;
 
 import com.api.nataly.poc1api.model.enums.PersonType;
+import com.api.nataly.poc1api.model.groups.CnpjGroup;
+import com.api.nataly.poc1api.model.groups.CpfGroup;
+import com.api.nataly.poc1api.model.groups.CustomerGroupSequenceProvider;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.*;
+import org.hibernate.validator.constraints.br.CNPJ;
+import org.hibernate.validator.constraints.br.CPF;
+import org.hibernate.validator.group.GroupSequenceProvider;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@GroupSequenceProvider(CustomerGroupSequenceProvider.class)
 public class CustomerDTO {
 
     private Long id;
@@ -27,6 +31,10 @@ public class CustomerDTO {
     @NotBlank(message = "É obrigatório informar o CPF/CNPJ do cliente!")
     @Getter(onMethod = @__({@JsonIgnore}))
     @Setter(onMethod = @__({@JsonProperty}))
+    @CPF(groups = CpfGroup.class)
+    @CNPJ(groups = CnpjGroup.class)
+    @Pattern(regexp = "(^\\d{3}.\\d{3}.\\d{3}-\\d{2}$)|(^\\d{2}.\\d{3}.\\d{3}/\\d{4}-\\d{2}$)",
+            message = "Digite um CPF/CNPJ com formato válido (com pontos e espaços)!")
     private String documentNumber;
 
     @NotNull(message = "É obrigatório informar se o cliente é Pessoa Física ou Pessoa Jurídica!")

@@ -40,7 +40,7 @@ public class CustomerController {
             return new ResponseEntity(dto, HttpStatus.CREATED); //status 201 Created
 
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().body(e.getMessage()); //status 400 Bad Request
         }
     }
 
@@ -56,7 +56,7 @@ public class CustomerController {
             return ResponseEntity.ok(dto); //status 200 Ok
 
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().body(e.getMessage()); //status 400 Bad Request
         }
     }
 
@@ -65,17 +65,17 @@ public class CustomerController {
         try {
             customerService.deleteById(id);
 
-            return new ResponseEntity(HttpStatus.NO_CONTENT);
+            return new ResponseEntity(HttpStatus.NO_CONTENT); //status 204 No Content
 
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().body(e.getMessage()); //status 400 Bad Request
         }
     }
 
     @GetMapping("/all")
     public ResponseEntity<Page<Customer>> findAllCustomers(@PageableDefault(page = 0, size = 10, sort = "id",
             direction = Sort.Direction.ASC) Pageable pageable){
-        return ResponseEntity.status(HttpStatus.OK).body(customerService.findAllCustomers(pageable));
+        return ResponseEntity.status(HttpStatus.OK).body(customerService.findAllCustomers(pageable)); //status 200 Ok
     }
 
     @GetMapping
@@ -97,10 +97,10 @@ public class CustomerController {
             List<Customer> entities = customerService.findCustomersByFilter(filter);
             List<CustomerDTO> dtos = customerConverterService.customerToDTOList(entities);
 
-            return ResponseEntity.ok(dtos);
+            return ResponseEntity.ok(dtos); //status 200 Ok
 
         }catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().body(e.getMessage()); //status 400 Bad Request
         }
     }
 
@@ -110,9 +110,9 @@ public class CustomerController {
         Optional<Customer> customerOptional = customerService.findById(id);
 
         if(!customerOptional.isPresent()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Customer not found.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Customer not found."); //status 404 Not Found
         }
-        return ResponseEntity.status(HttpStatus.OK).body(customerOptional.get());
+        return ResponseEntity.status(HttpStatus.OK).body(customerOptional.get()); //status 200 Ok
     }
 
 }

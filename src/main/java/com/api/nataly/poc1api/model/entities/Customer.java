@@ -4,19 +4,18 @@ import com.api.nataly.poc1api.model.enums.PersonType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
 import lombok.*;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Data
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "TB_CUSTOMER")
+//@GroupSequenceProvider(CustomerGroupSequenceProvider.class)
 public class Customer implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -35,7 +34,9 @@ public class Customer implements Serializable {
     @Getter(onMethod = @__({@JsonIgnore}))
     @Setter(onMethod = @__({@JsonProperty}))
     @Column(name = "CUSTOMER_DOCUMENT_NUMBER", nullable = false, unique = true)
-    private String documentNumber; //ver anotação para validacao de CPF e de CNPJ
+//    @CPF(groups = CpfGroup.class)
+//    @CNPJ(groups = CnpjGroup.class)
+    private String documentNumber;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "CUSTOMER_PERSON_TYPE", nullable = false)
