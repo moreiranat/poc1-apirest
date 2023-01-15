@@ -23,29 +23,29 @@ public class Address implements Serializable {
     @Column(name = "ADDRESS_ID")
     private Long id;
 
-    @Column(name = "ADDRESS_STREET", nullable = false)
-    private String street;
-
-    @Column(name = "ADDRESS_NUMBER", nullable = false)
-    private String number;
-
-    @Column(name = "ADDRESS_NEIGHBORHOOD", nullable = false)
-    private String neighborhood;
-
-    @Column(name = "ADDRESS_CITY", nullable = false)
-    private String city;
-
     @Column(name = "ADDRESS_CEP", nullable = false)
-    private String zipCode;
+    private String cep;
 
-    @Column(name = "ADDRESS_STATE", nullable = false)
-    private String state;
+    @Column(name = "ADDRESS_LOGRADOURO", nullable = false)
+    private String logradouro;
+
+    @Column(name = "ADDRESS_COMPLEMENTO", nullable = false)
+    private String complemento;
+
+    @Column(name = "ADDRESS_BAIRRO", nullable = false)
+    private String bairro;
+
+    @Column(name = "ADDRESS_LOCALIDADE", nullable = false)
+    private String localidade;
+
+    @Column(name = "ADDRESS_UF", nullable = false)
+    private String uf;
 
     @Column(name = "IS_MAIN_ADDRESS")
-    @JsonIgnore
+    //@JsonIgnore
     private Boolean isMainAddress = false;
 
-    @ManyToOne(fetch = FetchType.LAZY) //Muitos Enderecos podem estar associados a 1 Cliente
+    @ManyToOne(fetch = FetchType.EAGER) //Muitos Enderecos podem estar associados a 1 Cliente
     @JoinColumn(name = "CUSTOMER_ID")
     private Customer customer;
     //Lazy: carregado do banco apenas quando de fato necessário

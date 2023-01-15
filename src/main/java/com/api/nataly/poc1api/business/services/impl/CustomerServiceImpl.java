@@ -86,7 +86,7 @@ public class CustomerServiceImpl implements CustomerService {
     public void delete(Customer customer) {
         if(customer.getId() == null) {
             throw new MissingFieldException("id", "delete");
-        } else if (!customerRepository.existsById(customer.getId())) {
+        } else if(!customerRepository.existsById(customer.getId())) {
             throw new ObjectNotFoundException("customer", "id", customer.getId());
         }
 
@@ -98,7 +98,7 @@ public class CustomerServiceImpl implements CustomerService {
     public void deleteById(Long id) {
         if(id == null) {
             throw new MissingFieldException("id", "delete");
-        } else if (!customerRepository.existsById(id)) {
+        } else if(!customerRepository.existsById(id)) {
             throw new ObjectNotFoundException("customer", "id", id);
         }
 
@@ -122,7 +122,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public Optional<Customer> findById(Long id) {
+    public Customer findById(Long id) {
 
         return customerRepository.findById(id);
     }

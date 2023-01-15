@@ -11,17 +11,19 @@ public class AddressDTO {
 
     private Long id;
 
-    private String street;
+    private String cep;
 
-    private String number;
+    private String logradouro;
 
-    private String neighborhood;
+    private String complemento;
 
-    private String city;
+    private String bairro;
 
-    private String zipCode;
+    private String localidade;
 
-    private String state;
+    private String uf;
+
+    private Boolean isMainAddress = false;
 
     private Long customerId;
 
