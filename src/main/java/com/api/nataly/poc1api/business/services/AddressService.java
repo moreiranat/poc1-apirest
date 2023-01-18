@@ -13,12 +13,17 @@ import java.util.Optional;
 @Service
 public interface AddressService {
 
-    public Address save(AddressDTO addressDTO);
-    @Transactional
-    Address update(Long id, AddressDTO addressDTO);
-    Address updateMainAddress(Long id);
+    public Address save(Address address);
+    public Address update(Address address);
     public void delete(Long id);
     public Page<Address> findAllAddresses(Pageable pageable);
     public List<Address> findAddressesByFilter(Address filter);
-    public Address findById(Long id);
+    public Optional<Address> findById(Long id);
+
+//    Address updateMainAddress(Long id);
+
+
+
+
+
 }

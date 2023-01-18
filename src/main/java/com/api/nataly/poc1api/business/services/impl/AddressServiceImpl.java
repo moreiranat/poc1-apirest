@@ -4,13 +4,13 @@ import com.api.nataly.poc1api.business.services.AddressConverterService;
 import com.api.nataly.poc1api.business.services.AddressService;
 import com.api.nataly.poc1api.business.services.CustomerService;
 import com.api.nataly.poc1api.model.entities.Address;
-import com.api.nataly.poc1api.model.entities.Customer;
 import com.api.nataly.poc1api.model.repositories.AddressRepository;
 import com.api.nataly.poc1api.presentation.controllers.exceptions.*;
 import com.api.nataly.poc1api.presentation.dtos.AddressDTO;
 import com.google.gson.Gson;
 import jakarta.transaction.Transactional;
-import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -21,6 +21,7 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AddressServiceImpl implements AddressService {
@@ -39,26 +40,68 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     @Transactional
-    public Address save(AddressDTO addressDTO) {
+    public Address save(Address address) {
 
-        searchCep(addressDTO);
-
-        Customer customer = customerService.findById(addressDTO.getCustomerId());
-
-        Address address = new Address();
-        address.setIsMainAddress(customer.getAdresses().isEmpty());
-
-        BeanUtils.copyProperties(addressDTO, Address.class);
-
-        countMaximumAddressLimit(customer);
+        //Regra de negocio
+        countMaximumAddressLimit(address.getCustomer().getId());
 
         return addressRepository.save(address);
-
     }
 
-    private void countMaximumAddressLimit(Customer customer) {
-        if (customer.getAdresses().size() >= 5) {
-            throw new MaximumAddressLimitExceededException(customer.getId());
+    @Override
+    @Transactional
+    public Address update(Address address) {
+        if(address.getId() == null) {
+            throw new MissingFieldException("id", "update");
+        } else if(!addressRepository.existsById(address.getId())) {
+            throw new ObjectNotFoundException("address", "id", address.getId());
+        }
+        return addressRepository.save(address);
+    }
+
+    @Override
+    @Transactional
+    public void delete(Long id) {
+        var address = new Address();
+
+        if(id == null) {
+            throw new MissingFieldException("id", "delete");
+        } else if(!addressRepository.existsById(id)) {
+            throw new ObjectNotFoundException("address", "id", id);
+        }
+
+        if(address.getIsMainAddress().equals(Boolean.TRUE)) {
+            throw new MainAddressCannotBeDeletedException();
+        }
+        addressRepository.deleteById(id);
+    }
+
+    @Override
+    public Page<Address> findAllAddresses(Pageable pageable) {
+        return addressRepository.findAll(pageable);
+    }
+
+    @Override
+    public List<Address> findAddressesByFilter(Address filter) {
+        Example<Address> example = Example.of(filter,
+                ExampleMatcher.matching()
+                        .withIgnoreCase()
+                        .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING));
+
+        return addressRepository.findAll(example);
+    }
+
+    @Override
+    public Optional<Address> findById(Long id) {
+
+        return addressRepository.findById(id);
+    }
+
+    private void countMaximumAddressLimit(Long customerId) {
+
+        int quantityAddresses =  addressRepository.findByCustomerId(customerId);
+        if (quantityAddresses > 5) {
+            throw new MaximumAddressLimitExceededException(customerId);
         }
     }
 
@@ -91,87 +134,56 @@ public class AddressServiceImpl implements AddressService {
         return addressConverterService.dtoToAddress(addressDTO);
     }
 
-    @Override
-    @Transactional
-    public Address update(Long id, AddressDTO addressDTO) {
-       Address address = findById(id);
+//    @Override
+//    @Transactional
+//    public Address update(Long id, AddressDTO addressDTO) {
+//       Address address = findById(id);
+//
+//        if(address.getId() == null) {
+//            throw new MissingFieldException("id", "update");
+//        } else if(!addressRepository.existsById(address.getId())) {
+//            throw new ObjectNotFoundException("address", "id", address.getId());
+//        }
+//
+//        address.setCep(addressDTO.getCep());
+//        address.setLogradouro(addressDTO.getLogradouro());
+//        address.setComplemento(addressDTO.getComplemento());
+//        address.setBairro(addressDTO.getBairro());
+//        address.setLocalidade(addressDTO.getLocalidade());
+//        address.setUf(addressDTO.getUf());
+//
+//        address = searchCep(addressDTO);
+//
+//        BeanUtils.copyProperties(addressDTO, address);
+//
+//        return addressRepository.save(address);
+//    }
 
-        if(address.getId() == null) {
-            throw new MissingFieldException("id", "update");
-        } else if(!addressRepository.existsById(address.getId())) {
-            throw new ObjectNotFoundException("address", "id", address.getId());
-        }
-
-        address.setCep(addressDTO.getCep());
-        address.setLogradouro(addressDTO.getLogradouro());
-        address.setComplemento(addressDTO.getComplemento());
-        address.setBairro(addressDTO.getBairro());
-        address.setLocalidade(addressDTO.getLocalidade());
-        address.setUf(addressDTO.getUf());
-
-        address = searchCep(addressDTO);
-
-        BeanUtils.copyProperties(addressDTO, address);
-
-        return addressRepository.save(address);
-    }
-
-    @Override
-    public Address updateMainAddress(Long id) {
-        Address address = findById(id);
-
-        if(address.getId() == null) {
-            throw new MissingFieldException("id", "update");
-        } else if(!addressRepository.existsById(address.getId())) {
-            throw new ObjectNotFoundException("address", "id", address.getId());
-        }
-
-        address.getCustomer().getAdresses()
-                .forEach(a -> {
-                    a.setIsMainAddress(false);
-                    addressRepository.save(a);
-                });
-
-        address.setIsMainAddress(true);
-        return addressRepository.save(address);
-    }
-
-    @Override
-    @Transactional
-    public void delete(Long id) {
-        Address address = findById(id);
-
-        if(id == null) {
-            throw new MissingFieldException("id", "delete");
-        } else if(!addressRepository.existsById(id)) {
-            throw new ObjectNotFoundException("address", "id", id);
-        }
-
-        if(address.getIsMainAddress().equals(Boolean.TRUE)) {
-            throw  new DeleteMainAddressException();
-
-        }
-
-        addressRepository.deleteById(id);
+//    @Override
+//    public Address updateMainAddress(Long id) {
+//        Address address = findById(id);
+//
+//        if(address.getId() == null) {
+//            throw new MissingFieldException("id", "update");
+//        } else if(!addressRepository.existsById(address.getId())) {
+//            throw new ObjectNotFoundException("address", "id", address.getId());
+//        }
+//
+//        address.getCustomer().getAdresses()
+//                .forEach(a -> {
+//                    a.setIsMainAddress(false);
+//                    addressRepository.save(a);
+//                });
+//
+//        address.setIsMainAddress(true);
+//        return addressRepository.save(address);
+//    }
 
 
-    }
 
-    @Override
-    public Page<Address> findAllAddresses(Pageable pageable) {
-        return null;
-    }
-
-    @Override
-    public List<Address> findAddressesByFilter(Address filter) {
-        return null;
-    }
-
-    @Override
-    public Address findById(Long id) {
-
-        return addressRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("address", "id", id));
-
-
-    }
+//    @Override
+//    public Address findById(Long id) {
+//
+//        return addressRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("address", "id", id));
+//    }
 }

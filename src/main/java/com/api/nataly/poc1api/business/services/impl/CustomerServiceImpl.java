@@ -122,7 +122,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public Customer findById(Long id) {
+    public Optional<Customer> findById(Long id) {
 
         return customerRepository.findById(id);
     }

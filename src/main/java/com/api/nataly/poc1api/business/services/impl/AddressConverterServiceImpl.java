@@ -2,16 +2,26 @@ package com.api.nataly.poc1api.business.services.impl;
 
 import com.api.nataly.poc1api.business.services.AddressConverterService;
 import com.api.nataly.poc1api.model.entities.Address;
+import com.api.nataly.poc1api.model.entities.Customer;
+import com.api.nataly.poc1api.presentation.controllers.exceptions.ObjectAlreadyExistsException;
+import com.api.nataly.poc1api.presentation.controllers.exceptions.ObjectNotFoundException;
 import com.api.nataly.poc1api.presentation.dtos.AddressDTO;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AddressConverterServiceImpl implements AddressConverterService {
 
+
+    private final CustomerServiceImpl customerService;
     private static final String MESSAGE = "Could not convert, because object is null";
+
+    public AddressConverterServiceImpl(CustomerServiceImpl customerService) {
+        this.customerService = customerService;
+    }
 
     @Override
     public Address dtoToAddress(AddressDTO dto) {
@@ -26,7 +36,15 @@ public class AddressConverterServiceImpl implements AddressConverterService {
             entity.setLocalidade(dto.getLocalidade());
             entity.setUf(dto.getUf());
             entity.setIsMainAddress(dto.getIsMainAddress());
-            //entity.setCustomer(dto.getCustomerId().toString());
+
+            Long customerId = dto.getCustomerId();
+            Optional<Customer> customer = customerService.findById(customerId);
+
+            if (customer.isPresent()) {
+                entity.setCustomer(customer.get());
+            } else {
+                throw new ObjectNotFoundException("customer", "id", customer.get().getId()); //Corrigir exception
+            }
 
             return entity;
         }

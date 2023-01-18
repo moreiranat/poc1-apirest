@@ -11,6 +11,7 @@ public class AddressDTO {
 
     private Long id;
 
+
     private String cep;
 
     private String logradouro;
