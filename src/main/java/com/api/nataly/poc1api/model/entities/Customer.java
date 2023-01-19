@@ -49,7 +49,7 @@ public class Customer implements Serializable {
 
     @JsonIgnore
     @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY, cascade = CascadeType.ALL) //um Cliente pode ter varios Enderecos
-    private List<Address> adresses = new ArrayList<>();
+    private List<Address> addresses = new ArrayList<>();
     //Lazy: carregado do banco apenas quando de fato necessário
 
 }
