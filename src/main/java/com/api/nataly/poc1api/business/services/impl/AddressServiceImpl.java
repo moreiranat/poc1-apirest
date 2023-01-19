@@ -43,7 +43,7 @@ public class AddressServiceImpl implements AddressService {
     public Address save(Address address) {
 
         //Regra de negocio
-        countMaximumAddressLimit(address.getCustomer().getId());
+        limitMaximumNumberOfRegisteredAddresses(address.getCustomer().getId());
 
         return addressRepository.save(address);
     }
@@ -97,7 +97,7 @@ public class AddressServiceImpl implements AddressService {
         return addressRepository.findById(id);
     }
 
-    private void countMaximumAddressLimit(Long customerId) {
+    private void limitMaximumNumberOfRegisteredAddresses(Long customerId) {
 
         int quantityAddresses =  addressRepository.findByCustomerId(customerId);
         if (quantityAddresses > 5) {

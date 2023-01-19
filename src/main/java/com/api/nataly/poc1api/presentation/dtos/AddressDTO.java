@@ -1,5 +1,8 @@
 package com.api.nataly.poc1api.presentation.dtos;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,18 +14,24 @@ public class AddressDTO {
 
     private Long id;
 
+    @NotBlank(message = "É obrigatório informar o CEP!")
+    @Pattern(regexp = "[0-9]{5}-[0-9]{3}", message = "Digite um CEP com formato válido!")
+    private String cep; //zipCode
 
-    private String cep;
+    @NotBlank(message = "É obrigatório informar o logradouro!")
+    private String logradouro; //street
 
-    private String logradouro;
+    @NotBlank(message = "É obrigatório informar o complemento!")
+    private String complemento; //complement
 
-    private String complemento;
+    @NotBlank(message = "É obrigatório informar o bairro!")
+    private String bairro; //neighborhood
 
-    private String bairro;
+    @NotBlank(message = "É obrigatório informar a localidade!")
+    private String localidade; //city
 
-    private String localidade;
-
-    private String uf;
+    @NotBlank(message = "É obrigatório informar a UF!")
+    private String uf; //state
 
     private Boolean isMainAddress = false;
 

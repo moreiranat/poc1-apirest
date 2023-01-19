@@ -34,7 +34,7 @@ public class CustomerDTO {
     @CPF(groups = CpfGroup.class)
     @CNPJ(groups = CnpjGroup.class)
     @Pattern(regexp = "(^\\d{3}.\\d{3}.\\d{3}-\\d{2}$)|(^\\d{2}.\\d{3}.\\d{3}/\\d{4}-\\d{2}$)",
-            message = "Digite um CPF/CNPJ com formato válido (com pontos e espaços)!")
+            message = "Digite um CPF/CNPJ com formato válido!")
     private String documentNumber;
 
     @NotNull(message = "É obrigatório informar se o cliente é Pessoa Física ou Pessoa Jurídica!")
