@@ -4,6 +4,7 @@ import com.api.nataly.poc1api.business.services.AddressConverterService;
 import com.api.nataly.poc1api.business.services.AddressService;
 import com.api.nataly.poc1api.business.services.CustomerService;
 import com.api.nataly.poc1api.model.entities.Address;
+import com.api.nataly.poc1api.model.entities.Customer;
 import com.api.nataly.poc1api.model.repositories.AddressRepository;
 import com.api.nataly.poc1api.presentation.controllers.exceptions.*;
 import com.api.nataly.poc1api.presentation.dtos.AddressDTO;
@@ -20,7 +21,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -76,19 +76,19 @@ public class AddressServiceImpl implements AddressService {
         addressRepository.deleteById(id);
     }
 
-    @Override
-    public Page<Address> findAllAddresses(Pageable pageable) {
-        return addressRepository.findAll(pageable);
-    }
+//    @Override
+//    public Page<Address> findAllAddresses(Pageable pageable) {
+//        return addressRepository.findAll(pageable);
+//    }
 
     @Override
-    public List<Address> findAddressesByFilter(Address filter) {
+    public Page<Address> find(Address filter, Pageable pageable) {
         Example<Address> example = Example.of(filter,
                 ExampleMatcher.matching()
                         .withIgnoreCase()
                         .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING));
 
-        return addressRepository.findAll(example);
+        return addressRepository.findAll(example, pageable);
     }
 
     @Override
@@ -99,8 +99,13 @@ public class AddressServiceImpl implements AddressService {
 
     private void limitMaximumNumberOfRegisteredAddresses(Long customerId) {
 
-        int quantityAddresses =  addressRepository.findByCustomerId(customerId);
-        if (quantityAddresses > 5) {
+        Optional<Customer> customer = customerService.findById(customerId);
+
+        int totalNumberOfAddresses = customer.get().getAddresses().size();
+
+        int addressLimit = 5;
+
+        if (totalNumberOfAddresses >= addressLimit) {
             throw new MaximumAddressLimitExceededException(customerId);
         }
     }

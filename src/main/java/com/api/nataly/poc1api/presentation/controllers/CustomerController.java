@@ -30,7 +30,7 @@ public class CustomerController {
     }
 
     @PostMapping
-    public ResponseEntity save(@Valid @RequestBody CustomerDTO dto) {
+    public ResponseEntity<String> save(@Valid @RequestBody CustomerDTO dto) {
 
         try {
             Customer entity = customerConverterService.dtoToCustomer(dto);
@@ -72,30 +72,32 @@ public class CustomerController {
         }
     }
 
-    @GetMapping("/all")
-    public ResponseEntity<Page<Customer>> findAllCustomers(@PageableDefault(page = 0, size = 10, sort = "id",
-            direction = Sort.Direction.ASC) Pageable pageable){
-        return ResponseEntity.status(HttpStatus.OK).body(customerService.findAllCustomers(pageable)); //status 200 Ok
-    }
+//    @GetMapping("/all")
+//    public ResponseEntity<Page<Customer>> findAllCustomers(@PageableDefault(page = 0, size = 10, sort = "id",
+//            direction = Sort.Direction.ASC) Pageable pageable){
+//        return ResponseEntity.status(HttpStatus.OK).body(customerService.findAllCustomers(pageable)); //status 200 Ok
+//    }
 
     @GetMapping
-    public ResponseEntity findCustomersByFilter(
+    public ResponseEntity find(@PageableDefault(page = 0, size = 10, sort = "id",
+            direction = Sort.Direction.ASC) Pageable pageable,
             @RequestParam(value = "id", required = false) Long id,
             @RequestParam(value = "name", required = false) String name,
-            @RequestParam(value = "email", required = false) String email,
-            @RequestParam(value = "documentNumber", required = false) String documentNumber,
-            @RequestParam(value = "phoneNumber", required = false) String phoneNumber
+            @RequestParam(value = "email", required = false) String email
+//            @RequestParam(value = "documentNumber", required = false) String documentNumber,
+//            @RequestParam(value = "phoneNumber", required = false) String phoneNumber
     ) {
+
         try {
             Customer filter = new Customer();
             filter.setId(id);
             filter.setName(name);
             filter.setEmail(email);
-            filter.setDocumentNumber(documentNumber);
-            filter.setPhoneNumber(phoneNumber);
+//            filter.setDocumentNumber(documentNumber);
+//            filter.setPhoneNumber(phoneNumber);
 
-            List<Customer> entities = customerService.findCustomersByFilter(filter);
-            List<CustomerDTO> dtos = customerConverterService.customerToDTOList(entities);
+            Page<Customer> entities = customerService.find(filter, pageable);
+            List<CustomerDTO> dtos = customerConverterService.customerToDTOList(entities.getContent());
 
             return ResponseEntity.ok(dtos); //status 200 Ok
 

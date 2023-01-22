@@ -13,7 +13,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -105,20 +104,20 @@ public class CustomerServiceImpl implements CustomerService {
         customerRepository.deleteById(id);
     }
 
-    @Override
-    public Page<Customer> findAllCustomers(Pageable pageable) {
+//    @Override
+//    public Page<Customer> findAllCustomers(Pageable pageable) {
+//
+//        return customerRepository.findAll(pageable);
+//    }
 
-        return customerRepository.findAll(pageable);
-    }
-
     @Override
-    public List<Customer> findCustomersByFilter(Customer filter) {
+    public Page<Customer> find(Customer filter, Pageable pageable) {
         Example<Customer> example = Example.of(filter,
                 ExampleMatcher.matching()
                         .withIgnoreCase()
                         .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING));
 
-        return customerRepository.findAll(example);
+        return customerRepository.findAll(example, pageable);
     }
 
     @Override
