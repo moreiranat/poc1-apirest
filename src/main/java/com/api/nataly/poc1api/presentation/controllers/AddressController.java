@@ -79,7 +79,7 @@ public class AddressController {
     }
 */
     @GetMapping
-    public ResponseEntity find(@PageableDefault(page = 0, size = 5, sort = "id",
+    public ResponseEntity find(@PageableDefault(page = 0, size = 10, sort = "id",
             direction = Sort.Direction.ASC)  Pageable pageable,
             @RequestParam(value = "id", required = false) Long id,
             @RequestParam(value = "cep", required = false) String cep,
@@ -112,6 +112,8 @@ public class AddressController {
             Page<Address> entities = addressService.find(filter,pageable);
             List<AddressDTO> dtos = addressConverterService.addressToDTOList(entities.getContent());
 
+            System.out.println("######");
+            System.out.println(dtos.size());
             return ResponseEntity.ok(dtos); //status 200 Ok
 
         }catch (Exception e) {

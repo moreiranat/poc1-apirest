@@ -3,7 +3,6 @@ package com.api.nataly.poc1api.business.services.impl;
 import com.api.nataly.poc1api.business.services.AddressConverterService;
 import com.api.nataly.poc1api.model.entities.Address;
 import com.api.nataly.poc1api.model.entities.Customer;
-import com.api.nataly.poc1api.presentation.controllers.exceptions.ObjectAlreadyExistsException;
 import com.api.nataly.poc1api.presentation.controllers.exceptions.ObjectNotFoundException;
 import com.api.nataly.poc1api.presentation.dtos.AddressDTO;
 import org.springframework.stereotype.Service;
@@ -35,7 +34,7 @@ public class AddressConverterServiceImpl implements AddressConverterService {
             entity.setBairro(dto.getBairro());
             entity.setLocalidade(dto.getLocalidade());
             entity.setUf(dto.getUf());
-            entity.setIsMainAddress(dto.getIsMainAddress());
+            entity.setMainAddress(dto.getMainAddress());
 
             Long customerId = dto.getCustomerId();
             Optional<Customer> customer = customerService.findById(customerId);
@@ -64,7 +63,7 @@ public class AddressConverterServiceImpl implements AddressConverterService {
             dto.setBairro(entity.getBairro());
             dto.setLocalidade(entity.getLocalidade());
             dto.setUf(entity.getUf());
-            dto.setIsMainAddress(entity.getIsMainAddress());
+            dto.setMainAddress(entity.getMainAddress());
             dto.setCustomerId(entity.getCustomer().getId());
 
             return dto;

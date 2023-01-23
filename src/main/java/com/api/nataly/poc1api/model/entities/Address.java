@@ -41,11 +41,12 @@ public class Address implements Serializable {
     @Column(name = "ADDRESS_UF", nullable = false)
     private String uf;
 
-    @Column(name = "IS_MAIN_ADDRESS")
+    @Column(name = "MAIN_ADDRESS")
     //@JsonIgnore
-    private Boolean isMainAddress = false;
+    private Boolean mainAddress;
 
-    @ManyToOne(fetch = FetchType.EAGER) //Muitos Enderecos podem estar associados a 1 Cliente
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY) //Muitos Enderecos podem estar associados a 1 Cliente
     @JoinColumn(name = "CUSTOMER_ID")
     private Customer customer;
     //Lazy: carregado do banco apenas quando de fato necessário

@@ -1,5 +1,6 @@
 package com.api.nataly.poc1api.presentation.dtos;
 
+import com.api.nataly.poc1api.model.entities.Address;
 import com.api.nataly.poc1api.model.enums.PersonType;
 import com.api.nataly.poc1api.model.groups.CnpjGroup;
 import com.api.nataly.poc1api.model.groups.CpfGroup;
@@ -11,6 +12,8 @@ import lombok.*;
 import org.hibernate.validator.constraints.br.CNPJ;
 import org.hibernate.validator.constraints.br.CPF;
 import org.hibernate.validator.group.GroupSequenceProvider;
+
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -33,7 +36,7 @@ public class CustomerDTO {
     @Setter(onMethod = @__({@JsonProperty}))
     @CPF(groups = CpfGroup.class)
     @CNPJ(groups = CnpjGroup.class)
-    @Pattern(regexp = "(^\\d{3}.\\d{3}.\\d{3}-\\d{2}$)|(^\\d{2}.\\d{3}.\\d{3}/\\d{4}-\\d{2}$)",
+    @Pattern(regexp = "([0-9]{3}[\\\\.]?[0-9]{3}[\\\\.]?[0-9]{3}[-]?[0-9]{2})|([0-9]{2}[\\\\.]?[0-9]{3}[\\\\.]?[0-9]{3}[\\\\/]?[0-9]{4}[-]?[0-9]{2})",
             message = "Digite um CPF/CNPJ com formato válido!")
     private String documentNumber;
 
@@ -44,5 +47,7 @@ public class CustomerDTO {
     @Getter(onMethod = @__({@JsonIgnore}))
     @Setter(onMethod = @__({@JsonProperty}))
     private String phoneNumber;
+
+    private List<Address> addresses;
 
 }

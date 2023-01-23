@@ -33,8 +33,10 @@ public class AddressDTO {
     @NotBlank(message = "É obrigatório informar a UF!")
     private String uf; //state
 
-    private Boolean isMainAddress = false;
+    private Boolean mainAddress = false;
 
     private Long customerId;
+
+
 
 }

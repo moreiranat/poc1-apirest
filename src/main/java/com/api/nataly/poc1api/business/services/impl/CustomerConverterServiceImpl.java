@@ -24,6 +24,7 @@ public class CustomerConverterServiceImpl implements CustomerConverterService {
             entity.setDocumentNumber(dto.getDocumentNumber());
             entity.setPersonType(dto.getPersonType());
             entity.setPhoneNumber(dto.getPhoneNumber());
+            entity.setAddresses(dto.getAddresses());
 
             return entity;
         }
@@ -39,6 +40,7 @@ public class CustomerConverterServiceImpl implements CustomerConverterService {
             dto.setName(entity.getName());
             dto.setEmail(entity.getEmail());
             dto.setPersonType(entity.getPersonType());
+            dto.setAddresses(entity.getAddresses());
 
             return dto;
         }
