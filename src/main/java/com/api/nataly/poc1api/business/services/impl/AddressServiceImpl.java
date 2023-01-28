@@ -6,7 +6,6 @@ import com.api.nataly.poc1api.business.services.CustomerService;
 import com.api.nataly.poc1api.model.entities.Address;
 import com.api.nataly.poc1api.model.entities.Customer;
 import com.api.nataly.poc1api.model.repositories.AddressRepository;
-import com.api.nataly.poc1api.model.repositories.CustomerRepository;
 import com.api.nataly.poc1api.presentation.controllers.exceptions.*;
 import com.api.nataly.poc1api.presentation.dtos.AddressDTO;
 import com.google.gson.Gson;
@@ -22,6 +21,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -30,14 +30,11 @@ public class AddressServiceImpl implements AddressService {
     private final AddressRepository addressRepository;
     private final AddressConverterService addressConverterService;
     private final CustomerService customerService;
-    private final CustomerRepository customerRepository;
 
-    public AddressServiceImpl(AddressRepository addressRepository, AddressConverterService addressConverterService, CustomerService customerService,
-                              CustomerRepository customerRepository) {
+    public AddressServiceImpl(AddressRepository addressRepository, AddressConverterService addressConverterService, CustomerService customerService) {
         this.addressRepository = addressRepository;
         this.addressConverterService = addressConverterService;
         this.customerService = customerService;
-        this.customerRepository = customerRepository;
     }
 
     @Override
@@ -46,24 +43,34 @@ public class AddressServiceImpl implements AddressService {
 
         //Regra de negocio
         Optional<Customer> optionalCustomer = customerService.findById(address.getCustomer().getId());
-        Customer customer = optionalCustomer.get();
-        if(optionalCustomer.isPresent()) {
-            limitMaximumNumberOfRegisteredAddresses(customer);
-            if (Boolean.TRUE.equals(address.getMainAddress())) {
-                removerMainAddress(address.getCustomer().getId());
-            }
+        System.out.println("#########################sdiahsiodayhdhsahdiosa");
+
+        Customer customer;
+        if(optionalCustomer.isPresent()){
+            customer = optionalCustomer.get();
+        }else{
+            throw new ObjectNotFoundException("customer", "id", address.getCustomer().getId());
+        }
+
+        limitMaximumNumberOfRegisteredAddresses(customer);
+        if (Boolean.TRUE.equals(address.getMainAddress())) {
+            removerMainAddress(address.getCustomer().getId());
         }
 
         //Para garantir que o primeiro endereço seja o principal
         if(customer.getAddresses().isEmpty() && Boolean.TRUE.equals(!address.getMainAddress())) {
             address.setMainAddress(true);
         }
+
         return addressRepository.save(address);
     }
 
     @Override
     @Transactional
     public Address update(Address address) {
+
+        naoPodeAtualizarMainAddressParaFalso(address);
+
         if(address.getId() == null) {
             throw new MissingFieldException("id", "update");
         } else if(!addressRepository.existsById(address.getId())) {
@@ -74,6 +81,16 @@ public class AddressServiceImpl implements AddressService {
         }
 
         return addressRepository.save(address);
+    }
+
+    private void naoPodeAtualizarMainAddressParaFalso(Address address) {
+        Optional<Address> optionalAddress = addressRepository.findByCustomerIdAndMainAddress(address.getCustomer().getId(), true);
+        Address addressEncontrado = optionalAddress.get();
+
+        if(Boolean.TRUE.equals(!address.getMainAddress()) && Objects.equals(address.getId(), addressEncontrado.getId())){
+            throw new MainAddressCannotBeUpdatedException();
+        }
+
     }
 
     private void removerMainAddress(Long customerId) {
@@ -90,13 +107,15 @@ public class AddressServiceImpl implements AddressService {
     @Override
     @Transactional
     public void delete(Long id) {
-        var address = new Address();
+        Optional<Address> addressOptional = addressRepository.findById(id);
 
-        if(id == null) {
+        if(addressOptional.isEmpty()) {
             throw new MissingFieldException("id", "delete");
         } else if(!addressRepository.existsById(id)) {
             throw new ObjectNotFoundException("address", "id", id);
         }
+
+        Address address = addressOptional.get();
 
         if(address.getMainAddress().equals(Boolean.TRUE)) {
             throw new MainAddressCannotBeDeletedException();

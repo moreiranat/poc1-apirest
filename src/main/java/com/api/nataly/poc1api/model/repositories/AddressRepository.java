@@ -7,8 +7,9 @@ import java.util.Optional;
 
 public interface AddressRepository extends JpaRepository<Address, Long> {
 
-    int findByCustomerId(Long customerId);
+//    int findByCustomerId(Long customerId);
 
     Optional<Address> findByCustomerIdAndMainAddress(Long customerId, boolean b);
 
+//    boolean existsByCustomerId(Long customerId);
 }

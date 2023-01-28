@@ -35,7 +35,9 @@ public class CustomerDTO {
     @CPF(groups = CpfGroup.class)
     @CNPJ(groups = CnpjGroup.class)
     @Pattern(regexp = "([0-9]{3}[\\\\.]?[0-9]{3}[\\\\.]?[0-9]{3}[-]?[0-9]{2})|([0-9]{2}[\\\\.]?[0-9]{3}[\\\\.]?[0-9]{3}[\\\\/]?[0-9]{4}[-]?[0-9]{2})",
-            message = "Digite um CPF/CNPJ com formato válido!")
+            message = "Digite um CPF/CNPJ com formato válido. O CPF deve conter 11 dígitos e o CNPJ deve conter !")
+    @Pattern(regexp = "(^\\d{3}.\\d{3}.\\d{3}-\\d{2}$)|(^\\d{11}$)", message = "Digite um CPF com formato válido. O CPF deve conter 11 dígitos!", groups = CpfGroup.class)
+    @Pattern(regexp = "(^\\d{2}.\\d{3}.\\d{3}/\\d{4}-\\d{2}$)|(^\\d{14}$)", message = "Digite um CNPJ com formato válido. O CNPJ deve conter 14 dígitos!", groups = CnpjGroup.class)
     @Getter(onMethod = @__({@JsonIgnore}))
     @Setter(onMethod = @__({@JsonProperty}))
     private String documentNumber;
