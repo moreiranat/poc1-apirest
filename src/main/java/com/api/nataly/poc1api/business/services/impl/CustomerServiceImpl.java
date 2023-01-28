@@ -104,12 +104,6 @@ public class CustomerServiceImpl implements CustomerService {
         customerRepository.deleteById(id);
     }
 
-//    @Override
-//    public Page<Customer> findAllCustomers(Pageable pageable) {
-//
-//        return customerRepository.findAll(pageable);
-//    }
-
     @Override
     public Page<Customer> find(Customer filter, Pageable pageable) {
         Example<Customer> example = Example.of(filter,

@@ -6,6 +6,7 @@ import com.api.nataly.poc1api.business.services.CustomerService;
 import com.api.nataly.poc1api.model.entities.Address;
 import com.api.nataly.poc1api.model.entities.Customer;
 import com.api.nataly.poc1api.model.repositories.AddressRepository;
+import com.api.nataly.poc1api.model.repositories.CustomerRepository;
 import com.api.nataly.poc1api.presentation.controllers.exceptions.*;
 import com.api.nataly.poc1api.presentation.dtos.AddressDTO;
 import com.google.gson.Gson;
@@ -27,15 +28,16 @@ import java.util.Optional;
 public class AddressServiceImpl implements AddressService {
 
     private final AddressRepository addressRepository;
-
     private final AddressConverterService addressConverterService;
-
     private final CustomerService customerService;
+    private final CustomerRepository customerRepository;
 
-    public AddressServiceImpl(AddressRepository addressRepository, AddressConverterService addressConverterService, CustomerService customerService) {
+    public AddressServiceImpl(AddressRepository addressRepository, AddressConverterService addressConverterService, CustomerService customerService,
+                              CustomerRepository customerRepository) {
         this.addressRepository = addressRepository;
         this.addressConverterService = addressConverterService;
         this.customerService = customerService;
+        this.customerRepository = customerRepository;
     }
 
     @Override
@@ -47,7 +49,7 @@ public class AddressServiceImpl implements AddressService {
         Customer customer = optionalCustomer.get();
         if(optionalCustomer.isPresent()) {
             limitMaximumNumberOfRegisteredAddresses(customer);
-            if(Boolean.TRUE.equals(address.getMainAddress())){
+            if (Boolean.TRUE.equals(address.getMainAddress())) {
                 removerMainAddress(address.getCustomer().getId());
             }
         }
@@ -101,11 +103,6 @@ public class AddressServiceImpl implements AddressService {
         }
         addressRepository.deleteById(id);
     }
-
-//    @Override
-//    public Page<Address> findAllAddresses(Pageable pageable) {
-//        return addressRepository.findAll(pageable);
-//    }
 
     @Override
     public Page<Address> find(Address filter, Pageable pageable) {

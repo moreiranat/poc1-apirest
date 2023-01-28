@@ -32,18 +32,20 @@ public class CustomerDTO {
     private String email;
 
     @NotBlank(message = "É obrigatório informar o CPF/CNPJ do cliente!")
-    @Getter(onMethod = @__({@JsonIgnore}))
-    @Setter(onMethod = @__({@JsonProperty}))
     @CPF(groups = CpfGroup.class)
     @CNPJ(groups = CnpjGroup.class)
     @Pattern(regexp = "([0-9]{3}[\\\\.]?[0-9]{3}[\\\\.]?[0-9]{3}[-]?[0-9]{2})|([0-9]{2}[\\\\.]?[0-9]{3}[\\\\.]?[0-9]{3}[\\\\/]?[0-9]{4}[-]?[0-9]{2})",
             message = "Digite um CPF/CNPJ com formato válido!")
+    @Getter(onMethod = @__({@JsonIgnore}))
+    @Setter(onMethod = @__({@JsonProperty}))
     private String documentNumber;
 
     @NotNull(message = "É obrigatório informar se o cliente é Pessoa Física ou Pessoa Jurídica!")
     private PersonType personType;
 
     @NotBlank(message = "É obrigatório informar o número de telefone do cliente!")
+    @Size(min = 11, max = 11, message = "O número de telefone deve ter 11 dígitos!")
+    @Pattern(regexp = "^\\d{11}$", message = "O número de telefone só aceita números!")
     @Getter(onMethod = @__({@JsonIgnore}))
     @Setter(onMethod = @__({@JsonProperty}))
     private String phoneNumber;

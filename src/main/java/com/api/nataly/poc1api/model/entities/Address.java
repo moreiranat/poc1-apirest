@@ -10,7 +10,6 @@ import java.io.Serializable;
 
 @Data
 @Entity
-//@Embeddable
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "TB_ADDRESS")
@@ -42,7 +41,6 @@ public class Address implements Serializable {
     private String uf;
 
     @Column(name = "MAIN_ADDRESS")
-    //@JsonIgnore
     private Boolean mainAddress;
 
     @JsonIgnore

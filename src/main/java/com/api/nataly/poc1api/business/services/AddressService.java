@@ -13,14 +13,7 @@ public interface AddressService {
     public Address save(Address address);
     public Address update(Address address);
     public void delete(Long id);
-    //public Page<Address> findAllAddresses(Pageable pageable);
     public Page<Address> find(Address filter, Pageable pageable);
     public Optional<Address> findById(Long id);
-
-//    Address updateMainAddress(Long id);
-
-
-
-
 
 }

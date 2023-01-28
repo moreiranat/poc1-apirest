@@ -1,8 +1,8 @@
 package com.api.nataly.poc1api.presentation.dtos;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -33,8 +33,10 @@ public class AddressDTO {
     @NotBlank(message = "É obrigatório informar a UF!")
     private String uf; //state
 
+    @NotNull(message = "É obrigatório informar se é o endereço principal ou não!")
     private Boolean mainAddress = false;
 
+    @NotNull(message = "É obrigatório informar o id do Cliente referente a esse endereço!")
     private Long customerId;
 
 

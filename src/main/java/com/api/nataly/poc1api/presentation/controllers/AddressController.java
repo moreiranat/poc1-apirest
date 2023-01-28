@@ -71,13 +71,7 @@ public class AddressController {
             return ResponseEntity.badRequest().body(e.getMessage()); //status 400 Bad Request
         }
     }
-/*
-    @GetMapping("/all")
-    public ResponseEntity<Page<Address>> findAllAddresses(@PageableDefault(page = 0, size = 10, sort = "id",
-            direction = Sort.Direction.ASC) Pageable pageable){
-        return ResponseEntity.status(HttpStatus.OK).body(service.findAllAddresses(pageable)); //status 200 Ok
-    }
-*/
+
     @GetMapping
     public ResponseEntity find(@PageableDefault(page = 0, size = 10, sort = "id",
             direction = Sort.Direction.ASC)  Pageable pageable,
